@@ -1,4 +1,5 @@
 import React from "react";
+import Task from "./Task";
 import "./TaskManager.css";
 
 const TaskManager = () => {
@@ -22,6 +23,15 @@ const TaskManager = () => {
           </form>
         </div>
       </div>
+      {/* Display Task */}
+
+      <article className="--flex-center --my2">
+        <div className="--width-500px --p">
+          <h2 className="--text-light">Task List</h2>
+          <hr style={{ background: "#fff" }} />
+          <Task />
+        </div>
+      </article>
     </div>
   );
 };
