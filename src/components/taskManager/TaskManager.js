@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Task from "./Task";
 import "./TaskManager.css";
 
@@ -6,6 +6,12 @@ const TaskManager = () => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [tasks, setTasks] = useState([]);
+
+  const nameInputRef = useRef(null);
+
+  useEffect(() => {
+    nameInputRef.current.focus();
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +28,7 @@ const TaskManager = () => {
             <div>
               <label htmlFor="name">Task:</label>
               <input
+                ref={nameInputRef}
                 type="text"
                 placeholder="Task name"
                 name="name"
