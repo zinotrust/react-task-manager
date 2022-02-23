@@ -7,6 +7,9 @@ const TaskManager = () => {
   const [date, setDate] = useState("");
   const [tasks, setTasks] = useState([]);
 
+  const [taskID, setTaskID] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
   const nameInputRef = useRef(null);
 
   useEffect(() => {
@@ -17,6 +20,19 @@ const TaskManager = () => {
     e.preventDefault();
     if ((!name && !date) || !name || !date) {
       alert("Please enter task name and date");
+    } else if (name && date && isEditing) {
+      setTasks(
+        tasks.map((task) => {
+          if (task.id === taskID) {
+            return { ...task, name, date, complete: false };
+          }
+          return task;
+        })
+      );
+      setName("");
+      setDate("");
+      setIsEditing(false);
+      setTaskID(null);
     } else {
       const newTask = {
         id: Date.now(),
@@ -28,6 +44,14 @@ const TaskManager = () => {
       setName("");
       setDate("");
     }
+  };
+
+  const editTask = (id) => {
+    const thisTask = tasks.find((task) => task.id === id);
+    setIsEditing(true);
+    setTaskID(id);
+    setName(thisTask.name);
+    setDate(thisTask.date);
   };
 
   return (
@@ -74,7 +98,7 @@ const TaskManager = () => {
           ) : (
             <div>
               {tasks.map((task) => {
-                return <Task {...task} />;
+                return <Task {...task} editTask={editTask} />;
               })}
             </div>
           )}
