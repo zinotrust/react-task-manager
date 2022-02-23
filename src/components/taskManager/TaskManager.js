@@ -54,6 +54,24 @@ const TaskManager = () => {
     setDate(thisTask.date);
   };
 
+  const deleteTask = (id) => {
+    if (window.confirm("Delete this task") === true) {
+      const newTasks = tasks.filter((task) => task.id !== id);
+      setTasks(newTasks);
+    }
+  };
+
+  const completeTask = (id) => {
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, complete: true };
+        }
+        return task;
+      })
+    );
+  };
+
   return (
     <div className="--bg-primary">
       <h1 className="--text-center --text-light">Task Manager</h1>
@@ -98,7 +116,14 @@ const TaskManager = () => {
           ) : (
             <div>
               {tasks.map((task) => {
-                return <Task {...task} editTask={editTask} />;
+                return (
+                  <Task
+                    {...task}
+                    editTask={editTask}
+                    deleteTask={deleteTask}
+                    completeTask={completeTask}
+                  />
+                );
               })}
             </div>
           )}
