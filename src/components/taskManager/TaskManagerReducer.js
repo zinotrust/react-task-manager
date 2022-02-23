@@ -5,7 +5,17 @@ import Confirm from "../confirm/Confirm";
 import Task from "./Task";
 import "./TaskManager.css";
 
-const taskReducer = (state, action) => {};
+const taskReducer = (state, action) => {
+  if (action.type === "EMPTY_FIELD") {
+    return {
+      ...state,
+      isAlertOpen: true,
+      alertContent: "Please enter name and date",
+      alertClass: "danger",
+    };
+  }
+  return state;
+};
 
 const TaskManagerReducer = () => {
   const [name, setName] = useState("");
@@ -16,7 +26,7 @@ const TaskManagerReducer = () => {
     tasks,
     taskID: null,
     isEditing: false,
-    isAlertOpen: true,
+    isAlertOpen: false,
     alertContent: "This is an alert",
     alertClass: "danger",
   };
@@ -33,6 +43,11 @@ const TaskManagerReducer = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!name || !date) {
+      dispatch({
+        type: "EMPTY_FIELD",
+      });
+    }
   };
 
   const editTask = (id) => {};
