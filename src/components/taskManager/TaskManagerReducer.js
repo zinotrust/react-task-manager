@@ -14,6 +14,11 @@ const taskReducer = (state, action) => {
       alertClass: "danger",
     };
   }
+
+  if (action.type === "CLOSE_ALERT") {
+    return { ...state, isAlertOpen: false };
+  }
+
   return state;
 };
 
@@ -39,7 +44,11 @@ const TaskManagerReducer = () => {
     nameInputRef.current.focus();
   });
 
-  const closeAlert = () => {};
+  const closeAlert = () => {
+    dispatch({
+      type: "CLOSE_ALERT",
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
