@@ -15,8 +15,19 @@ const TaskManager = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name);
-    console.log(date);
+    if ((!name && !date) || !name || !date) {
+      alert("Please enter task name and date");
+    } else {
+      const newTask = {
+        id: Date.now(),
+        name,
+        date,
+        complete: false,
+      };
+      setTasks([...tasks, newTask]);
+      setName("");
+      setDate("");
+    }
   };
 
   return (
@@ -58,7 +69,15 @@ const TaskManager = () => {
         <div className="--width-500px --p">
           <h2 className="--text-light">Task List</h2>
           <hr style={{ background: "#fff" }} />
-          <Task />
+          {tasks.length === 0 ? (
+            <p className="--text-light">No task added...</p>
+          ) : (
+            <div>
+              {tasks.map((task) => {
+                return <Task {...task} />;
+              })}
+            </div>
+          )}
         </div>
       </article>
     </div>
