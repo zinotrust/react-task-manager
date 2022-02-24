@@ -46,6 +46,11 @@ const TaskManagerReducer = () => {
     isAlertOpen: false,
     alertContent: "This is an alert",
     alertClass: "danger",
+    isEditModalOpen: true,
+    isDeleteModalOpen: false,
+    modalTitle: "Delete Task",
+    modalMsg: "You are about to delete this task.",
+    modalActionText: "OK",
   };
 
   const [state, dispatch] = useReducer(taskReducer, initialState);
@@ -92,6 +97,8 @@ const TaskManagerReducer = () => {
 
   const completeTask = (id) => {};
 
+  const closeModal = () => {};
+
   return (
     <div className="--bg-primary">
       {state.isAlertOpen && (
@@ -101,8 +108,16 @@ const TaskManagerReducer = () => {
           onCloseAlert={closeAlert}
         />
       )}
+      {state.isEditModalOpen && (
+        <Confirm
+          modalTitle={state.modalTitle}
+          modalMsg={state.modalMsg}
+          modalActionText={state.modalActionText}
+          modalAction={editTask}
+          onCloseModal={closeModal}
+        />
+      )}
 
-      {/* <Confirm /> */}
       <h2 className="--text-center --text-light">Task Manager Reducer</h2>
       <div className="--flex-center --p">
         <div className="--card --bg-light --width-500px --p --flex-center">
