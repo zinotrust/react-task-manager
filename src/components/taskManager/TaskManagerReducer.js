@@ -99,6 +99,32 @@ const taskReducer = (state, action) => {
     };
   }
 
+  if (action.type === "COMPLETE_TASK") {
+    const id = action.payload;
+    // Find the task index
+    const taskIndex = state.tasks.findIndex((task) => {
+      return task.id === id;
+    });
+
+    let updatedTask = {
+      id,
+      name: state.tasks[taskIndex].name,
+      date: state.tasks[taskIndex].date,
+      complete: true,
+    };
+
+    if (taskIndex !== -1) {
+      state.tasks[taskIndex] = updatedTask;
+    }
+
+    return {
+      ...state,
+      isAlertOpen: true,
+      alertContent: "Task Completed",
+      alertClass: "success",
+    };
+  }
+
   return state;
 };
 
@@ -222,7 +248,21 @@ const TaskManagerReducer = () => {
     setTasks(newTasks);
   };
 
-  const completeTask = (id) => {};
+  const completeTask = (id) => {
+    dispatch({
+      type: "COMPLETE_TASK",
+      payload: id,
+    });
+
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, complete: true };
+        }
+        return task;
+      })
+    );
+  };
 
   const closeModal = () => {
     dispatch({
