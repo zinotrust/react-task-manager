@@ -75,7 +75,7 @@ const taskReducer = (state, action) => {
   }
 
   if (action.type === "OPEN_DELETE_MODAL") {
-    console.log(action.payload);
+    // console.log(action.payload);
     return {
       ...state,
       taskID: action.payload,
@@ -83,6 +83,19 @@ const taskReducer = (state, action) => {
       modalTitle: "Delete Task",
       modalMsg: "You are about to delete a task",
       modalActionText: "Delete",
+    };
+  }
+
+  if (action.type === "DELETE_TASK") {
+    const id = action.payload;
+    const newTasks = state.tasks.filter((task) => task.id !== id);
+    return {
+      ...state,
+      tasks: newTasks,
+      isAlertOpen: true,
+      alertContent: "Task deleted successfully",
+      alertClass: "success",
+      isDeleteModalOpen: false,
     };
   }
 
@@ -199,7 +212,15 @@ const TaskManagerReducer = () => {
     });
   };
 
-  const deleteTask = (id) => {};
+  const deleteTask = () => {
+    const id = state.taskID;
+    dispatch({
+      type: "DELETE_TASK",
+      payload: id,
+    });
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
+  };
 
   const completeTask = (id) => {};
 
