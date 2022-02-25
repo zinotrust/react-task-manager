@@ -43,6 +43,37 @@ const taskReducer = (state, action) => {
     };
   }
 
+  if (action.type === "CLOSE_MODAL") {
+    return { ...state, isEditModalOpen: false };
+  }
+
+  if (action.type === "EDIT_TASK") {
+    return { ...state, isEditing: true };
+  }
+
+  if (action.type === "UPDATE_TASK") {
+    console.log(action.payload);
+    const updatedTask = action.payload;
+    const id = action.payload.id;
+
+    // Find the task index
+    const taskIndex = state.tasks.findIndex((task) => {
+      return task.id === id;
+    });
+    // Replace the task by its index
+    if (taskIndex !== -1) {
+      state.tasks[taskIndex] = updatedTask;
+    }
+
+    return {
+      ...state,
+      isEditing: false,
+      isAlertOpen: true,
+      alertContent: " Task edited successfully",
+      alertClass: "success",
+    };
+  }
+
   return state;
 };
 
@@ -86,6 +117,31 @@ const TaskManagerReducer = () => {
         type: "EMPTY_FIELD",
       });
     }
+
+    if (name && date && state.isEditing) {
+      const updatedTask = {
+        id: state.taskID,
+        name,
+        date,
+        complete: false,
+      };
+      dispatch({
+        type: "UPDATE_TASK",
+        payload: updatedTask,
+      });
+      setName("");
+      setDate("");
+      setTasks(
+        tasks.map((task) => {
+          if (task.id === updatedTask.id) {
+            return { ...task, name, date, complete: false };
+          }
+          return task;
+        })
+      );
+      return;
+    }
+
     if (name && date) {
       const newTask = {
         id: Date.now(),
@@ -110,13 +166,29 @@ const TaskManagerReducer = () => {
     });
   };
 
-  const editTask = (id) => {};
+  const editTask = () => {
+    console.log(state.taskID);
+    const id = state.taskID;
+    dispatch({
+      type: "EDIT_TASK",
+      payload: id,
+    });
+    const thisTask = state.tasks.find((task) => task.id === id);
+    setName(thisTask.name);
+    setDate(thisTask.date);
+    closeModal();
+    console.log(state.isEditing);
+  };
 
   const deleteTask = (id) => {};
 
   const completeTask = (id) => {};
 
-  const closeModal = () => {};
+  const closeModal = () => {
+    dispatch({
+      type: "CLOSE_MODAL",
+    });
+  };
 
   return (
     <div className="--bg-primary">
@@ -163,7 +235,7 @@ const TaskManagerReducer = () => {
               />
             </div>
             <button className="--btn --btn-success --btn-block">
-              Save Task
+              {state.isEditing ? "Edit Task" : "Save Task"}
             </button>
           </form>
         </div>
