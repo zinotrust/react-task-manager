@@ -103,7 +103,7 @@ const TaskManager = () => {
               />
             </div>
             <button className="--btn --btn-success --btn-block">
-              Save Task
+              {isEditing ? "Edit Task" : "Save Task"}
             </button>
           </form>
         </div>

@@ -15,6 +15,8 @@ export const taskReducer = (state, action) => {
   if (action.type === "ADD_TASK") {
     console.log(action.payload);
     const allTasks = [...state.tasks, action.payload];
+    // uodate task in LS
+    localStorage.setItem("tasks", JSON.stringify(allTasks));
     return {
       ...state,
       tasks: allTasks,
@@ -57,6 +59,7 @@ export const taskReducer = (state, action) => {
     if (taskIndex !== -1) {
       state.tasks[taskIndex] = updatedTask;
     }
+    localStorage.setItem("tasks", JSON.stringify(state.tasks));
 
     return {
       ...state,
@@ -82,6 +85,7 @@ export const taskReducer = (state, action) => {
   if (action.type === "DELETE_TASK") {
     const id = action.payload;
     const newTasks = state.tasks.filter((task) => task.id !== id);
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
     return {
       ...state,
       tasks: newTasks,
@@ -109,7 +113,7 @@ export const taskReducer = (state, action) => {
     if (taskIndex !== -1) {
       state.tasks[taskIndex] = updatedTask;
     }
-
+    localStorage.setItem("tasks", JSON.stringify(state.tasks));
     return {
       ...state,
       isAlertOpen: true,

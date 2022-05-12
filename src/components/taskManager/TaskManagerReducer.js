@@ -9,10 +9,12 @@ import { taskReducer } from "./taskReducer";
 const TaskManagerReducer = () => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-  const [tasks, setTasks] = useLocalStorage("tasks", []);
+  // const [tasks, setTasks] = useLocalStorage("tasks", []);
 
   const initialState = {
-    tasks,
+    tasks: localStorage.getItem("tasks")
+      ? JSON.parse(localStorage.getItem("tasks"))
+      : [],
     taskID: null,
     isEditing: false,
     isAlertOpen: false,
@@ -60,14 +62,14 @@ const TaskManagerReducer = () => {
       });
       setName("");
       setDate("");
-      setTasks(
-        tasks.map((task) => {
-          if (task.id === updatedTask.id) {
-            return { ...task, name, date, complete: false };
-          }
-          return task;
-        })
-      );
+      // setTasks(
+      //   tasks.map((task) => {
+      //     if (task.id === updatedTask.id) {
+      //       return { ...task, name, date, complete: false };
+      //     }
+      //     return task;
+      //   })
+      // );
       return;
     }
 
@@ -84,7 +86,7 @@ const TaskManagerReducer = () => {
       });
       setName("");
       setDate("");
-      setTasks([...tasks, newTask]);
+      // setTasks([...tasks, newTask]);
     }
   };
 
@@ -122,8 +124,8 @@ const TaskManagerReducer = () => {
       type: "DELETE_TASK",
       payload: id,
     });
-    const newTasks = tasks.filter((task) => task.id !== id);
-    setTasks(newTasks);
+    // const newTasks = tasks.filter((task) => task.id !== id);
+    // setTasks(newTasks);
   };
 
   const completeTask = (id) => {
@@ -132,14 +134,14 @@ const TaskManagerReducer = () => {
       payload: id,
     });
 
-    setTasks(
-      tasks.map((task) => {
-        if (task.id === id) {
-          return { ...task, complete: true };
-        }
-        return task;
-      })
-    );
+    // setTasks(
+    //   tasks.map((task) => {
+    //     if (task.id === id) {
+    //       return { ...task, complete: true };
+    //     }
+    //     return task;
+    //   })
+    // );
   };
 
   const closeModal = () => {
